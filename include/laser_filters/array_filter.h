@@ -98,7 +98,6 @@ public:
 
     boost::mutex::scoped_lock lock(data_lock);
     scan_out = scan_in; ///Quickly pass through all data \todo don't copy data too
-    RCLCPP_INFO(logging_interface_->get_logger(), "LaserArrayFilter cleaning and reallocating due to larger scan size");
     std::cout << "scan in ranges: " << scan_in.ranges.size() << " num_ranges: " << num_ranges_ << std::endl;
     if (scan_in.ranges.size() != num_ranges_) //Reallocating
     {
