@@ -104,8 +104,9 @@ public:
       num_ranges_ = scan_in.ranges.size();
 
       RCLCPP_INFO(logging_interface_->get_logger(), "LaserArrayFilter cleaning and reallocating due to larger scan size");
-
-      configure();
+      if (num_ranges_ == 0){
+        configure();
+      }
     }
 
     /** \todo check for length of intensities too */
