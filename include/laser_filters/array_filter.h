@@ -98,16 +98,17 @@ public:
 
     boost::mutex::scoped_lock lock(data_lock);
     scan_out = scan_in; ///Quickly pass through all data \todo don't copy data too
-    RCLCPP_INFO(logging_interface_->get_logger(), "scan in ranges: %d | num_ranges: %d", (int)scan_in.ranges.size(), (int)num_ranges_);
+    //RCLCPP_INFO(logging_interface_->get_logger(), "scan in ranges: %d | num_ranges: %d", (int)scan_in.ranges.size(), (int)num_ranges_);
     if (scan_in.ranges.size() != num_ranges_) //Reallocating
     {
       
       num_ranges_ = scan_in.ranges.size();
 
-      RCLCPP_INFO(logging_interface_->get_logger(), "LaserArrayFilter cleaning and reallocating due to larger scan size");
+      
       if (!configure_called_){
         configure();
         configure_called_ = true;
+        RCLCPP_INFO(logging_interface_->get_logger(), "LaserArrayFilter cleaning and reallocating due to larger scan size");
       }
       
     }
