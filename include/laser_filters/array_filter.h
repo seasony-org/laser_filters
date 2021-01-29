@@ -101,12 +101,15 @@ public:
     RCLCPP_INFO(logging_interface_->get_logger(), "scan in ranges: %d | num_ranges: %d", (int)scan_in.ranges.size(), (int)num_ranges_);
     if (scan_in.ranges.size() != num_ranges_) //Reallocating
     {
-       if (num_ranges_ == 0){
-        configure();
-      }
+      
       num_ranges_ = scan_in.ranges.size();
 
       RCLCPP_INFO(logging_interface_->get_logger(), "LaserArrayFilter cleaning and reallocating due to larger scan size");
+      if (!configure_called_){
+        configure();
+        configure_called_ = true;
+      }
+      
     }
 
     /** \todo check for length of intensities too */
@@ -119,6 +122,7 @@ public:
 private:
   unsigned int filter_length_; ///How many scans to average over
   unsigned int num_ranges_;    /// How many data point are in each row
+  bool configure_called_ = false;
 
   rclcpp::Parameter range_config_;
   rclcpp::Parameter intensity_config_;
