@@ -98,7 +98,7 @@ public:
 
     boost::mutex::scoped_lock lock(data_lock);
     scan_out = scan_in; ///Quickly pass through all data \todo don't copy data too
-    std::cout << "scan in ranges: " << scan_in.ranges.size() << " num_ranges: " << num_ranges_ << std::endl;
+    RCLCPP_INFO(logging_interface_->get_logger(), "scan in ranges: %d | num_ranges: %d", (int)scan_in.ranges.size(), (int)num_ranges_);
     if (scan_in.ranges.size() != num_ranges_) //Reallocating
     {
       num_ranges_ = scan_in.ranges.size();
