@@ -59,18 +59,26 @@ protected:
   // Components for publishing
   sensor_msgs::msg::LaserScan msg_;
   rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr output_pub_;
-
+private:
+    std::string _scan_in_topic;
+    std::string _scan_out_topic;
+    
 public:
   // Constructor
   ScanToScanFilterChain(rclcpp::Node::SharedPtr node)
       : nh_(node),
         tf_(NULL),
         buffer_(nh_->get_clock()),
-        scan_sub_(nh_, "scan", rmw_qos_profile_sensor_data),
         tf_filter_(NULL),
         filter_chain_("sensor_msgs::msg::LaserScan")
   {
     // Configure filter chain
+    nh_->declare_parameter<std::string>("scan_in_topic", "scan");
+    nh_->get_parameter("scan_in_topic", _scan_in_topic);
+    nh_->declare_parameter<std::string>("scan_out_topic", "scan_filtered");
+    nh_->get_parameter("scan_out_topic", _scan_out_topic);
+    RCLCPP_INFO(nh_->get_logger(), "Scan in topic: %s | Scan out topic: %s" , _scan_in_topic.c_str(), _scan_out_topic.c_str());
+    scan_sub_.subscribe(nh_, _scan_in_topic, rmw_qos_profile_sensor_data);
     filter_chain_.configure("", nh_->get_node_logging_interface(), nh_->get_node_parameters_interface());
 
     std::string tf_message_filter_target_frame;
@@ -94,7 +102,7 @@ public:
     }
     
     // Advertise output
-    output_pub_ = nh_->create_publisher<sensor_msgs::msg::LaserScan>("scan_filtered", 1000);
+    output_pub_ = nh_->create_publisher<sensor_msgs::msg::LaserScan>(_scan_out_topic, 1000);
   }
 
   // Destructor

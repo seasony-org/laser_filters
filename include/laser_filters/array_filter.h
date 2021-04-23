@@ -116,7 +116,7 @@ public:
     /** \todo check for length of intensities too */
     range_filter_->update(scan_in.ranges, scan_out.ranges);
     intensity_filter_->update(scan_in.intensities, scan_out.intensities);
-
+  
     return true;
   }
 
