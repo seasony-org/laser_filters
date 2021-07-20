@@ -13,7 +13,6 @@ ament_auto_find_build_dependencies()
 ##############################################################################
 
 ament_auto_add_library(laser_scan_filters SHARED src/laser_scan_filters.cpp)
-ament_auto_add_library(pointcloud_filters SHARED src/pointcloud_filters.cpp)
 
 set(FILTER_CHAINS
     scan_to_cloud_filter_chain
@@ -40,7 +39,7 @@ if(BUILD_TESTING)
     set(TEST_NAME test_scan_filter_chain)
     set(RESULT_FILENAME ${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${TEST_NAME}.gtest.xml)
     ament_add_gtest_executable(${TEST_NAME} test/${TEST_NAME}.cpp)
-    ament_target_dependencies(${TEST_NAME} rclcpp pluginlib)
+    ament_target_dependencies(${TEST_NAME} filters pluginlib rclcpp)
     ament_add_test(
         ${TEST_NAME}
         COMMAND 
